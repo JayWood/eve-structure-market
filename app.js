@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT;
 const fetch = require( 'sync-fetch' );
-const fs = require( 'fs' );
 
 let jsonResponse = [];
 
@@ -13,7 +12,7 @@ const refreshToken = token => {
 	const details = {
 		grant_type: 'refresh_token',
 		refresh_token,
-		client_id: process.env.clientId,
+		client_id: process.env.CLIENTID,
 		scope: 'esi-markets.structure_markets.v1',
 	};
 
