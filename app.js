@@ -90,6 +90,12 @@ const getJSON = ( { structureID, page } ) => {
 }
 
 app.get('/', (req, res) => {
+	const secureToken = process.env?.SECURETOKEN;
+	const queryToken = req.query?.token;
+	if ( secureToken && secureToken !== queryToken ) {
+		res.send( 'Auth failure' );
+	}
+
 	const isSummary = req.query?.type === 'summary';
 	jsonResponse = [];
 	let {jsonData, cache} = getJSON( {
