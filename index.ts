@@ -12,11 +12,23 @@ app.use( ( req: Request, res: Response, next: NextFunction ) => {
         res.status(401).json({ error: 'Forbidden' } );
     }
 
+    res.set( 'Cache-control', 'public, max-age=300' );
+
     next();
 } );
 
 app.get( '/', ( req: Request, res: Response ) => {
     res.send( 'Hello' );
+} );
+
+app.get( '/system-compare', async ( req: Request, res: Response ) => {
+    const {string: typeids = '', systems = ''} = req.query;
+    if ( ! typeids || ! systems ) {
+        res.status(400).json( { error: 'Required variables of systems or typeids are not set.' } );
+    }
+
+    const systemArray = systems.split();
+
 } );
 
 app.listen( PORT, () => {
