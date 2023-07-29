@@ -3,9 +3,17 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT;
+const path = require('path');
 const fetch = require( 'sync-fetch' );
 
 let jsonResponse = [];
+
+// Set the views directory
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// Define the static directory for CSS and JS files
+app.use(express.static(path.join(__dirname, 'public')));
 
 const refreshToken = token => {
 	const refresh_token = process.env.TOKEN;
@@ -136,6 +144,10 @@ app.get('/', (req, res) => {
 
 	res.send( jsonData );
 })
+
+app.get('/calculate', (req, res) => {
+	res.render('calculate');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
