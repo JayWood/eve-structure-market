@@ -9,11 +9,11 @@ const tradeStations: Record<string, number> = {
 
 const endpoint = 'https://api.evemarketer.com/ec/marketstat/json';
 
-const eveMarketerQuery = ( typeIds: Array<number>, system: string ) => {
+const eveMarketerQuery = ( typeIds: string, system: string ) => {
     const url = new URL( endpoint );
-    url.searchParams.append( 'typeid', typeIds.join( ',' ) );
+    url.searchParams.append( 'typeid', typeIds );
     url.searchParams.append( 'usesystem', tradeStations[ system ]?.toString() ?? tradeStations.jita.toString() );
-    return axios.get<QueryResponse>( `${endpoint}` )
+    return axios.get( url.toString() )
 }
 
 export {
