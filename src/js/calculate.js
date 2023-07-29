@@ -16,13 +16,14 @@ document.getElementById('fleetForm').addEventListener('submit', function (event)
 function calculateTotalTime(startTime, endTime) {
     const startTimestamp = new Date(`1970-01-01T${startTime}`).getTime();
     const endTimestamp = new Date(`1970-01-01T${endTime}`).getTime();
+    const finalEnd = endTimestamp < startTimestamp ? new Date(`1970-01-02T${endTime}`).getTime() : endTimestamp;
 
-    if (startTimestamp >= endTimestamp) {
+    if (startTimestamp >= finalEnd) {
         return 0; // If the start time is after or equal to the end time, return 0
     }
 
     // Calculate the total time in minutes
-    const totalTime = (endTimestamp - startTimestamp) / (1000 * 60);
+    const totalTime = (finalEnd - startTimestamp) / (1000 * 60);
     return Math.round(totalTime / 15) * 15; // Round to the nearest 15 minutes
 }
 
@@ -62,10 +63,10 @@ function displayResults(players) {
     const tableBody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
 
-    // Add this code to display column headers
-    const table = document.getElementById('resultTable');
-    const headerRow = table.createTHead().insertRow();
-    headerRow.innerHTML = '<th>Player</th><th>Joined</th><th>Left</th><th>Time in Group (15m)</th>';
+    // // Add this code to display column headers
+    // const table = document.getElementById('resultTable');
+    // const headerRow = table.createTHead().insertRow();
+    // headerRow.innerHTML = '<th>Player</th><th>Joined</th><th>Left</th><th>Time in Group (15m)</th>';
 
     for (const player in players) {
         const {joinTime, leaveTime} = players[player];
