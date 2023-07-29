@@ -28,7 +28,7 @@ function calculateTotalTime(startTime, endTime) {
 }
 
 function parseFleetData(data) {
-    const lines = data.split('\n');
+    const lines = data.split('\n').filter(i => i);
     const players = {};
 
     for (const line of lines) {
@@ -63,11 +63,6 @@ function displayResults(players) {
     const tableBody = document.getElementById('resultTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
 
-    // // Add this code to display column headers
-    // const table = document.getElementById('resultTable');
-    // const headerRow = table.createTHead().insertRow();
-    // headerRow.innerHTML = '<th>Player</th><th>Joined</th><th>Left</th><th>Time in Group (15m)</th>';
-
     for (const player in players) {
         const {joinTime, leaveTime} = players[player];
         const row = tableBody.insertRow();
@@ -85,25 +80,11 @@ function displayResults(players) {
         if (joinTime && leaveTime) {
             const joinTimestamp = new Date(`1970-01-01T${joinTime}`).getTime();
             const leaveTimestamp = new Date(`1970-01-01T${leaveTime}`).getTime();
-            const timeInGroup = (leaveTimestamp - joinTimestamp) / (1000 * 60);
+            const finalEnd = leaveTimestamp < joinTimestamp ? new Date(`1970-01-02T${leaveTime}`).getTime() : leaveTimestamp;
+            const timeInGroup = (finalEnd - joinTimestamp) / (1000 * 60);
             timeInGroupCell.textContent = Math.round(timeInGroup / 15) * 15;
         } else {
             timeInGroupCell.textContent = 'Still in group';
         }
     }
-}
-
-
-function calculateTimeInGroup(joinTime, leaveTime) {
-    if (!joinTime || !leaveTime) {
-        return 'N/A';
-    }
-
-    const joinTimestamp = new Date(`1970-01-01T${joinTime}`).getTime();
-    const leaveTimestamp = new Date(`1970-01-01T${leaveTime}`).getTime();
-    const timeDiff = leaveTimestamp - joinTimestamp;
-    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-    return `${hours}h ${minutes}m ${seconds}s`;
 }
