@@ -47,7 +47,6 @@ const refreshToken = token => {
 const getToken = () => {
 	try {
 		const output = refreshToken( process.env.TOKEN );
-		console.log( "Token refresh: " + output );
 		const {access_token} = JSON.parse( output );
 		return access_token;
 	} catch ( err ) {
