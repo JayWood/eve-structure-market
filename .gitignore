@@ -4,3 +4,4 @@ token.json
 .idea/
 dist/
 public/
+firebaseKeys.json
