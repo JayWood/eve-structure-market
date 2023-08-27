@@ -37,43 +37,6 @@ app.get( '/', ( req: Request, res: Response ) => {
     res.status(418).json( { status: "error", message: 'State your intentions!' } );
 } );
 
-app.get( '/system-compare', async ( req: Request, res: Response ) => {
-    res.send( 'Yep' );
-   // try{
-   //     const typeids = req.query?.typeids;
-   //     const from = req.query?.from;
-   //     const to = req.query?.to;
-   //
-   //     if ( ! typeids || ! from || ! to ) {
-   //         res.status(400).json( { error: 'Required variables of systems or typeids are not set.' } );
-   //     }
-   //
-   //     const starting = await eveMarketerQuery( typeids as string, from as string );
-   //     const end = await eveMarketerQuery( typeids as string, to as string );
-   //
-   //     const startingData = starting.data as QueryResponse;
-   //     const endData = end.data as QueryResponse;
-   //     const types = (typeids as string).split(',');
-   //     let output = {};
-   //
-   //     types.forEach( (typeid, index) => {
-   //         const _exp = startingData[index];
-   //         const _imp = endData[index];
-   //
-   //         output[typeid] = {
-   //             export: {
-   //
-   //             },
-   //             import: {},
-   //         };
-   //     } );
-   //
-   //     res.json( output );
-   // } catch( e ) {
-   //     res.json( e );
-   // }
-} );
-
 app.listen( PORT, () => {
     console.log( `App listening on port ${PORT}` );
 } );
