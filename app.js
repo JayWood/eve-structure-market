@@ -97,6 +97,9 @@ const getJSON = ( { structureID, page } ) => {
 }
 
 app.get('/', (req, res) => {
+	res.send( 'Denied' );
+	return;
+
 	const secureToken = process.env?.SECURETOKEN;
 	const queryToken = req.query?.token;
 	if ( secureToken && secureToken !== queryToken ) {
