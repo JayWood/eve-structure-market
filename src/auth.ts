@@ -112,8 +112,6 @@ export const validateToken = async (response: codeResponse ) => {
         playerId: parseInt( playerId )
     }
 
-    console.log( document );
-
     await collectionRef.doc( playerId ).set(document);
     console.log( 'Document saved' );
 };
