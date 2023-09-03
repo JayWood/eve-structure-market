@@ -5,6 +5,8 @@ const app = express();
 const port = process.env.PORT;
 const path = require('path');
 const fetch = require( 'sync-fetch' );
+const {loginUrl, login} = require("./src/auth");
+const url = require( 'url' );
 
 let jsonResponse = [];
 
@@ -95,6 +97,7 @@ const getJSON = ( { structureID, page } ) => {
 		}
 	};
 }
+/*
 
 app.get('/', (req, res) => {
 	const secureToken = process.env?.SECURETOKEN;
@@ -143,6 +146,22 @@ app.get('/', (req, res) => {
 
 	res.send( jsonData );
 })
+*/
+
+app.get( '/test', (req, res) => {
+	res.send( 'made it' );
+	// res.redirect( `${req.protocol}://${req.get('host')}/token` );
+} );
+
+app.get( '/token', (request, response ) => {
+	const {code,state} = request?.query;
+	if ( state !== 'eve-structure-market' ) {
+		response.status(401).send( 'Unauthorized' );
+		return;
+	}
+
+	response.send( login( code ) );
+} );
 
 app.get('/calculate', (req, res) => {
 	res.render('calculate');

@@ -1,8 +1,7 @@
 import 'dotenv/config.js';
 import express, {NextFunction, Request, Response} from 'express';
-import {eveMarketerQuery} from "./src/apiQueries";
-import {QueryResponse} from "./src/types/eveMarketer";
 import path from "path";
+import {validateToken, login, loginUrl} from "./src/auth";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -30,11 +29,44 @@ app.get('/calculate', (req, res) => {
     res.render('calculate');
 });
 
+interface QueryType {
+    code: string;
+    state: string;
+}
+
 // Define the static directory for CSS and JS files
 app.use(express.static(path.join( mainDir, 'public')));
 
 app.get( '/', ( req: Request, res: Response ) => {
     res.status(418).json( { status: "error", message: 'State your intentions!' } );
+} );
+
+app.get( '/login', (req, res) => {
+    const theUrl = loginUrl( `${req.protocol}://${req.get('host')}/token` );
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.redirect( theUrl );
+} );
+
+app.get( '/token', async (request, response ) => {
+    response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+    // @ts-ignore
+    const {code = '',state = '' } = request?.query as QueryType;
+    if ( state !== 'eve-structure-market' ) {
+        response.status(401).send( 'Unauthorized' );
+        return;
+    }
+
+    try {
+        const result = await login(code);
+        const responseData = result.data;
+        console.log( responseData );
+        await validateToken( responseData );
+        response.send( responseData );
+    } catch ( e ) {
+        console.log( e );
+        response.send( 'An error occurred' );
+    }
 } );
 
 app.listen( PORT, () => {
