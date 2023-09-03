@@ -64,7 +64,6 @@ app.get( '/token', async (request, response ) => {
         // TODO: redirect to dashboard w/ login token.
         // TODO: set a cookie for the user for X days to say they're logged in.
         // TODO: Set the value of the cookie to the refresh token.
-        // TODO: make sure we can refresh tokens, look at auth.ts, needs a new method.
         response.send( responseData );
     } catch ( e ) {
         console.log( e );

@@ -89,6 +89,28 @@ export const login = ( authorizationCode: string ) => {
     );
 }
 
+export const refreshToken = async ( refresh_token: string ) => {
+     const params = {
+        grant_type: 'refresh_token',
+        refresh_token
+    };
+
+    const tokenUpdate = axios.post(
+        TOKEN_URL,
+        params,
+        {
+            headers: {
+                'Authorization': `Basic ${refresh_token}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Host': 'login.eveonline.com',
+            }
+        }
+    );
+
+    validateToken( tokenUpdate.data );
+};
+
+
 export const validateToken = async (response: codeResponse ) => {
     const {access_token, refresh_token} = response;
     const client = jwksClient({jwksUri: 'https://login.eveonline.com/oauth/jwks'});
